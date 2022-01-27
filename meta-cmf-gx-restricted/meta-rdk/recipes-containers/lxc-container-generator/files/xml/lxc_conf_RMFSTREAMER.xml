@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+################################################################################
+# If not stated otherwise in this file or this component's Licenses.txt file the
+# following copyright and licenses apply:
+#
+# Copyright 2017 Liberty Global B.V.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+-->
+<!-- XML CONFIGURATION FOR RMFSTREAMER-->
+
+<CONTAINER  SandboxName="RMFSTREAMER">
+    <LxcParams>
+        <LauncherName>rmfstreamer</LauncherName>
+        <ExecName>/usr/bin/rmfStreamer</ExecName>
+        <ExecParams>--config /etc/rmfconfig.ini --debugconfig /etc/debug.ini</ExecParams>
+        <StopFunction enable="true"></StopFunction>
+    </LxcParams>
+    <LxcConfig>
+        <UserName>rmfstreamer</UserName>
+        <GroupName>rmfstreamer</GroupName>
+        <CGroupSettings>
+            <DeviceCgroup>
+                <DevicesDeny>a</DevicesDeny>
+                <AllowDefaultDevices enable="yes"/>
+            </DeviceCgroup>
+        </CGroupSettings>
+        <Network type="none"></Network>
+        <Dbus enable="true"></Dbus>
+        <Environment>
+            <Variable>DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket</Variable>
+            <Variable>DtcpSrmFilePath=/opt/persistent/dtcp.srm</Variable>
+            <Variable>MALLOC_CHECK_=2</Variable>
+        </Environment>
+        <Rootfs create="yes">
+            <MountPoints>
+<!-- /bin -->
+                <Entry type="file">
+                    <Source>/bin/sh</Source>
+                    <Destination>bin/sh</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/bin/grep</Source>
+                    <Destination>bin/grep</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/bin/cat</Source>
+                    <Destination>bin/cat</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /usr/bin -->
+                <Entry type="file">
+                    <Source>/usr/bin/rmfStreamer</Source>
+                    <Destination>usr/bin/rmfStreamer</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/channel_info.config</Source>
+                    <Destination>usr/bin/channel_info.config</Destination>
+                    <Options>ro,bind,nosuid,nodev,noexec</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/tune.config</Source>
+                    <Destination>usr/bin/tune.config</Destination>
+                    <Options>ro,bind,nosuid,nodev,noexec</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/sidb.xml</Source>
+                    <!-- file is read from current working dir, which running in container is / -->
+                    <Destination>sidb.xml</Destination>
+                    <Options>ro,bind,nosuid,nodev,noexec</Options>
+                </Entry>
+
+<!-- /usr/share -->
+                <Entry type="dir">
+                    <Source>/usr/share/X11/xkb</Source>
+                    <Destination>usr/share/X11/xkb</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /usr/lib -->
+                <Entry type="dir">
+                    <Source>/usr/lib/gio/modules</Source>
+                    <Destination>usr/lib/gio/modules</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/usr/lib/gstreamer-1.0</Source>
+                    <Destination>usr/lib/gstreamer-1.0</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/usr/libexec/gstreamer-1.0</Source>
+                    <Destination>usr/libexec/gstreamer-1.0</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /opt -->
+                <Entry type="dir">
+                    <Source>/opt/data</Source>
+                    <Destination>opt/data</Destination>
+                    <Options>rw,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/opt/www</Source>
+                    <Destination>opt/www</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /tmp -->
+                <Entry type="dir">
+                    <Source>/tmp/mnt/diska3</Source>
+                    <Destination>tmp/mnt/diska3</Destination>
+                    <Options>rw,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /etc -->
+                <Entry type="file">
+                    <Source>/etc/debug.ini</Source>
+                    <Destination>etc/debug.ini</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/device.properties</Source>
+                    <Destination>etc/device.properties</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/os-release</Source>
+                    <Destination>etc/os-release</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/resolv.conf</Source>
+                    <Destination>etc/resolv.conf</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/host.conf</Source>
+                    <Destination>etc/host.conf</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/hosts</Source>
+                    <Destination>etc/hosts</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/nsswitch.conf</Source>
+                    <Destination>etc/nsswitch.conf</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/rmfconfig.ini</Source>
+                    <Destination>etc/rmfconfig.ini</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/log4crc</Source>
+                    <Destination>etc/log4crc</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /run -->
+                <Entry type="file">
+                    <Source>/run/systemd/journal/socket</Source>
+                    <Destination>run/systemd/journal/socket</Destination>
+                    <Options>rw,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /proc -->
+                <Entry type="dir">
+                    <Source>proc</Source>
+                    <Destination>proc</Destination>
+                    <FsType>proc</FsType>
+                    <Options>defaults,noexec,nosuid,nodev,hidepid=2</Options>
+                </Entry>
+
+<!-- /sysfs -->
+                <Entry type="dir">
+                    <Source>sysfs</Source>
+                    <Destination>sys</Destination>
+                    <FsType>sysfs</FsType>
+                    <Options>defaults,noexec,nosuid,nodev</Options>
+                </Entry>
+
+            </MountPoints>
+
+            <LibsRoBindMounts>
+                <Entry>ld</Entry>
+                <Entry>libaamp</Entry>
+                <Entry>libaampjsbindings</Entry>
+                <Entry>libatk</Entry>
+                <Entry>libgstaamp</Entry>
+                <Entry>libabr</Entry>
+                <Entry>libasound</Entry>
+                <Entry>libasound</Entry>
+                <Entry>libattr</Entry>
+                <Entry>libbcm_host</Entry>
+                <Entry>libbz2</Entry>
+                <Entry>libc</Entry>
+                <Entry>libcairo</Entry>
+                <Entry>libcap</Entry>
+                <Entry>libcjson</Entry>
+                <Entry>libcrypto</Entry>
+                <Entry>libcurl</Entry>
+                <Entry>libdash</Entry>
+                <Entry>libdbus-1</Entry>
+                <Entry>libdl</Entry>
+                <Entry>libDtcpMgr</Entry>
+                <Entry>libdumpfilesink</Entry>
+                <Entry>libdvrmgr</Entry>
+                <Entry>libdvrmgrsoc</Entry>
+                <Entry>libdvrsink</Entry>
+                <Entry>libdvrsource</Entry>
+                <Entry>libEGL</Entry>
+                <Entry>libexpat</Entry>
+                <Entry>libfaad</Entry>
+                <Entry>libffi</Entry>
+                <Entry>libFLAC</Entry>
+                <Entry>libfontconfig</Entry>
+                <Entry>libfreetype</Entry>
+                <Entry>libgcc_s</Entry>
+                <Entry>libgcrypt</Entry>
+                <Entry>libgio</Entry>
+                <Entry>libGLESv2</Entry>
+                <Entry>libglib</Entry>
+                <Entry>libgmodule</Entry>
+                <Entry>libgmp</Entry>
+                <Entry>libgnutls</Entry>
+                <Entry>libgobject</Entry>
+                <Entry>libgpg-error</Entry>
+                <Entry>libgssdp</Entry>
+                <Entry>libgstadaptivedemux-1.0</Entry>
+                <Entry>libgstallocators-1.0</Entry>
+                <Entry>libgstapp-1.0</Entry>
+                <Entry>libgstaudio-1.0</Entry>
+                <Entry>libgstbadbase-1.0</Entry>
+                <Entry>libgstbadvideo-1.0</Entry>
+                <Entry>libgstbase-1.0</Entry>
+                <Entry>libgstbase</Entry>
+                <Entry>libgstcheck-1.0</Entry>
+                <Entry>libgstcodecparsers-1.0</Entry>
+                <Entry>libgstcontroller-1.0</Entry>
+                <Entry>libgstfft-1.0</Entry>
+                <Entry>libgstfft</Entry>
+                <Entry>libgstgl-1.0</Entry>
+                <Entry>libgstmpegts-1.0</Entry>
+                <Entry>libgstnet-1.0</Entry>
+                <Entry>libgstpbutils-1.0</Entry>
+                <Entry>libgstreamer-1.0</Entry>
+                <Entry>libgstreamer</Entry>
+                <Entry>libgstriff-1.0</Entry>
+                <Entry>libgstrmfmeta</Entry>
+                <Entry>libgstrtp-1.0</Entry>
+                <Entry>libgstrtsp-1.0</Entry>
+                <Entry>libgstsdp-1.0</Entry>
+                <Entry>libgsttag-1.0</Entry>
+                <Entry>libgsturidownloader-1.0</Entry>
+                <Entry>libgstvideo-1.0</Entry>
+                <Entry>libgthread</Entry>
+                <Entry>libgupnp-av</Entry>
+                <Entry>libgupnp</Entry>
+                <Entry>libgupnp</Entry>
+                <Entry>libharfbuzz</Entry>
+                <Entry>libhdhomerun</Entry>
+                <Entry>libhnsink</Entry>
+                <Entry>libhnsource</Entry>
+                <Entry>libhogweed</Entry>
+                <Entry>libIARMBus</Entry>
+                <Entry>libicudata</Entry>
+                <Entry>libicui18n</Entry>
+                <Entry>libicuuc</Entry>
+                <Entry>libinbsectionfilter</Entry>
+                <Entry>libinbsimanager</Entry>
+                <Entry>libjansson</Entry>
+                <Entry>libjpeg</Entry>
+                <Entry>liblog4c</Entry>
+                <Entry>liblzma</Entry>
+                <Entry>libm</Entry>
+                <Entry>libmediaplayersink</Entry>
+                <Entry>libmongoose</Entry>
+                <Entry>libmpg123</Entry>
+                <Entry>libNE10</Entry>
+                <Entry>libnettle</Entry>
+                <Entry>libnsl</Entry>
+                <Entry>libnss_compat</Entry>
+                <Entry>libnss_dns</Entry>
+                <Entry>libnss_files</Entry>
+                <Entry>libogg</Entry>
+                <Entry>liboobsectionfilter</Entry>
+                <Entry>liboobsimgrstub</Entry>
+                <Entry>libopus</Entry>
+                <Entry>liborc-0.4</Entry>
+                <Entry>libpcre</Entry>
+                <Entry>libpixman-1</Entry>
+                <Entry>libpng16</Entry>
+                <Entry>libpthread</Entry>
+                <Entry>libqamsrc</Entry>
+                <Entry>libQt5Core</Entry>
+                <Entry>libQt5Gui</Entry>
+                <Entry>libQt5Network</Entry>
+                <Entry>libQt5Sql</Entry>
+                <Entry>librbi</Entry>
+                <Entry>librbifilter</Entry>
+                <Entry>librdkloggers</Entry>
+                <Entry>librdkstmgr</Entry>
+                <Entry>librecorder</Entry>
+                <Entry>libresolv</Entry>
+                <Entry>librfcapi</Entry>
+                <Entry>librmfbase</Entry>
+                <Entry>librmfinit</Entry>
+                <Entry>librmfosal</Entry>
+                <Entry>librmfosalutils</Entry>
+                <Entry>librt</Entry>
+                <Entry>librtCore</Entry>
+                <Entry>libsectionfilter</Entry>
+                <Entry>libsecure_wrapper</Entry>
+                <Entry>libsharedtsb</Entry>
+                <Entry>libsoup-2.4</Entry>
+                <Entry>libsoup</Entry>
+                <Entry>libsqlite3</Entry>
+                <Entry>libssl</Entry>
+                <Entry>libstdc++</Entry>
+                <Entry>libsystemd</Entry>
+                <Entry>libTasseograph</Entry>
+                <Entry>libtheoradec</Entry>
+                <Entry>libtheoraenc</Entry>
+                <Entry>libtinfo</Entry>
+                <Entry>libtinyxml</Entry>
+                <Entry>libtrh</Entry>
+                <Entry>libtrm</Entry>
+                <Entry>libudev</Entry>
+                <Entry>libutil</Entry>
+                <Entry>libuuid</Entry>
+                <Entry>libvchiq_arm</Entry>
+                <Entry>libvchiq_arm</Entry>
+                <Entry>libvchostif</Entry>
+                <Entry>libvchostif</Entry>
+                <Entry>libvcos</Entry>
+                <Entry>libvcos</Entry>
+                <Entry>libvorbis</Entry>
+                <Entry>libvorbisenc</Entry>
+                <Entry>libvorbisidec</Entry>
+                <Entry>libwayland-client</Entry>
+                <Entry>libwayland-egl</Entry>
+                <Entry>libwayland-server</Entry>
+                <Entry>libwebp</Entry>
+                <Entry>libwebpdemux</Entry>
+                <Entry>libwesteros_compositor</Entry>
+                <Entry>libwesteros_simplebuffer_client</Entry>
+                <Entry>libwesteros_simplebuffer_server</Entry>
+                <Entry>libwesteros_simpleshell_client</Entry>
+                <Entry>libwesteros_simpleshell_server</Entry>
+                <Entry>libwpe-0.2</Entry>
+                <Entry>libWPEWebKit</Entry>
+                <Entry>libxkbcommon</Entry>
+                <Entry>libxml2</Entry>
+                <Entry>libxslt</Entry>
+                <Entry>libz</Entry>
+                <Entry>libTTSClient</Entry>
+                <Entry>librtRemote</Entry>
+                <Entry>libatomic</Entry>
+                <Entry>libbreakpadwrapper</Entry>
+                <Entry>libepoxy</Entry>
+                <Entry>libocdm</Entry>
+                <Entry>libWPEFrameworkCore</Entry>
+                <Entry>libWPEFrameworkProtocols</Entry>
+                <Entry>libWPEFrameworkTracing</Entry>
+                <Entry>libWPEFrameworkCryptalgo</Entry>
+                <Entry>liba52</Entry>
+                <Entry>libtr181api</Entry>
+                <Entry>libessos</Entry>
+                <Entry>libwesteros_gl</Entry>
+                <Entry>libessosrmgr</Entry>
+                <Entry>libTextToSpeechServiceClient</Entry>
+                <Entry>librdkat</Entry>
+                <Entry>libWPEFrameworkPlugins</Entry>
+                <Entry>libWPEFrameworkSecurityUtil</Entry>
+                <Entry>libsafec-3.5.1</Entry>
+                <Entry>libcrashlog</Entry>
+                <Entry>libmetrics</Entry>
+                <Entry>libsecurityagent</Entry>
+                <Entry>libevent-2.0</Entry>
+                <Entry>libbrotlidec</Entry>
+                <Entry>libbrotlicommon</Entry>
+            </LibsRoBindMounts>
+        </Rootfs>
+    </LxcConfig>
+</CONTAINER>
+

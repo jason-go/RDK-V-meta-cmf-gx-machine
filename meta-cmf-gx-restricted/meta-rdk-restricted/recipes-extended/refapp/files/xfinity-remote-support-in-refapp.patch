@@ -1,0 +1,26 @@
+From: pnandyala <pavan.nandyala@lnttechservices.com>
+Date: Wed Aug 28 09:51:46 2019 +0000
+
+Subject: TS-17 : Exit the video playback from Reference App
+
+Reason for change: Need to add this change to fix XFINITY key issues
+in refapp
+Test Procedure: Now XFinity, exit and guide keys will work for refapp
+Risks: None
+
+Signed-off-by: pnandyala <pavan.nandyala@lnttechservices.com>
+---
+
+diff --git a/src/shared/mapKeyCode.js b/src/shared/mapKeyCode.js
+index 740caf6..903f3c9 100644
+--- a/src/shared/mapKeyCode.js
++++ b/src/shared/mapKeyCode.js
+@@ -31,6 +31,8 @@ if (typeof px !== 'undefined') {
+             [pxKeys.DOWN]: Keys.Down,
+             [pxKeys.ENTER]: Keys.Enter,
+             [pxKeys.I]: Keys.Info,
++            [pxKeys.E]: Keys.BackToTV,
++            [pxKeys.MENU]: Keys.Menu,
+             [pxKeys.M]: Keys.Menu,
+             [pxKeys.B]: Keys.Back,
+             // several keys from Xiaomi remote come in as 0, at least now we have a BACK until there is a better fix

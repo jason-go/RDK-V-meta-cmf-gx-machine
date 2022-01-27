@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+################################################################################
+# If not stated otherwise in this file or this component's Licenses.txt file the
+# following copyright and licenses apply:
+#
+# Copyright 2017 Liberty Global B.V.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+-->
+<!-- XML CONFIGURATION FOR PLATFORM CONTROL-->
+
+<CONTAINER SandboxName="PLATFORMCONTROL">
+	<LxcParams>
+		<LauncherName>platformcontrol</LauncherName>
+		
+<!-- sysMgrMain -->
+
+		<ExecName>/usr/bin/sysMgrMain</ExecName>
+		<ExecParams>--debugconfig /etc/debug.ini</ExecParams>
+		<SystemdNotify create="yes">
+			<PidFile>/var/run/platformcontrol/sysmgr.pid</PidFile>
+		</SystemdNotify>
+		<StopFunction enable="true"></StopFunction>`
+
+<!-- irMgrMain -->
+		<Attach>
+			<ParamName>irmgr</ParamName>
+			<ExecName>/usr/bin/irMgrMain</ExecName>
+			<ExecParams>--debugconfig /etc/debug.ini</ExecParams>
+			<SystemdNotify create="yes">
+				<PidFile>/var/run/platformcontrol/irmgr.pid</PidFile>
+			</SystemdNotify>
+			<UserName>platformcontrol</UserName>
+			<GroupName>platformcontrol</GroupName>
+		</Attach>
+
+<!-- dsMgrMain -->
+		<Attach>
+		<ParamName>dsmgr</ParamName>
+		<ExecName>/usr/bin/dsMgrMain</ExecName>
+		<ExecParams>--debugconfig /etc/debug.ini</ExecParams>
+		<SystemdNotify create="yes">
+			<PidFile>/var/run/platformcontrol/dsmgr.pid</PidFile>
+		</SystemdNotify>
+		<UserName>platformcontrol</UserName>
+		<GroupName>platformcontrol</GroupName>
+		</Attach>
+	</LxcParams>
+
+	<LxcConfig>
+		<UserName>platformcontrol</UserName>
+		<GroupName>platformcontrol</GroupName>
+		<CGroupSettings>
+			<DeviceCgroup>
+				<DevicesDeny>a</DevicesDeny>
+				<DevicesAllow name="/dev/vchiq">c 245:0 rw</DevicesAllow>
+				<DevicesAllow name="/dev/snd/controlC0">c 116:0 rw</DevicesAllow>
+				<AllowDefaultDevices enable="yes"/>
+			</DeviceCgroup>
+		</CGroupSettings>
+		<Environment>
+			<Variable>MALLOC_CHECK_=2</Variable>
+		</Environment>
+		<Network type="empty"></Network>
+		<Dbus enable="true"></Dbus>
+
+		<Rootfs create="yes">
+			<MountPoints>
+<!-- /usr/bin -->
+				<Entry type="file">
+					<Source>/usr/bin/dsMgrMain</Source>
+					<Destination>usr/bin/dsMgrMain</Destination>
+					<Options>ro,bind,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/usr/bin/irMgrMain</Source>
+					<Destination>usr/bin/irMgrMain</Destination>
+					<Options>ro,bind,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/usr/bin/sysMgrMain</Source>
+					<Destination>usr/bin/sysMgrMain</Destination>
+					<Options>ro,bind,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/usr/bin/platform.cfg</Source>
+					<Destination>usr/bin/platform.cfg</Destination>
+					<Options>ro,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+<!-- /usr/share -->
+				<Entry type="dir">
+					<Source>/usr/share/alsa</Source>
+					<Destination>usr/share/alsa</Destination>
+					<Options>ro,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+<!-- /bin -->
+				<Entry type="file">
+					<Source>/bin/sh</Source>
+					<Destination>bin/sh</Destination>
+					<Options>ro,bind,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/bin/systemctl</Source>
+					<Destination>bin/systemctl</Destination>
+					<Options>ro,bind,nosuid,nodev</Options>
+				</Entry>
+
+<!-- /etc -->
+
+				<Entry type="file">
+					<Source>/etc/debug.ini</Source>
+					<Destination>etc/debug.ini</Destination>
+					<Options>ro,bind,noexec,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/etc/asound.conf</Source>
+					<Destination>etc/asound.conf</Destination>
+					<Options>ro,bind,noexec,nosuid,nodev</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/etc/log4crc</Source>
+					<Destination>etc/log4crc</Destination>
+					<Options>ro,bind,noexec,nosuid,nodev</Options>
+				</Entry>
+
+<!-- /opt -->
+				<Entry type="dir">
+					<Source>/opt/persistent/ds</Source>
+					<Destination>opt/persistent/ds</Destination>
+					<Options>rw,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+<!-- /run -->
+				<Entry type="file">
+					<Source>/run/systemd/notify</Source>
+					<Destination>run/systemd/notify</Destination>
+					<Options>rw,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+<!-- /var -->
+				<Entry type="dir">
+					<Source>/var/run/platformcontrol</Source>
+					<Destination>var/run/platformcontrol</Destination>
+					<Options>rw,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+				<Entry type="file">
+					<Source>/var/run/lirc/lircd</Source>
+					<Destination>var/run/lirc/lircd</Destination>
+					<Options>rw,bind,nosuid,nodev,noexec</Options>
+				</Entry>
+
+<!-- /proc -->
+				<Entry type="dir">
+					<Source>proc</Source>
+					<Destination>proc</Destination>
+					<FsType>proc</FsType>
+					<Options>defaults,noexec,nosuid,nodev,hidepid=2</Options>
+				</Entry>
+
+<!-- /sysfs -->
+				<Entry type="dir">
+					<Source>sysfs</Source>
+					<Destination>sys</Destination>
+					<FsType>sysfs</FsType>
+					<Options>defaults,noexec,nosuid,nodev</Options>
+				</Entry>
+
+<!-- /dev -->
+
+				<Entry type="dev">
+					<Source>/dev/vchiq</Source>
+					<Destination>dev/vchiq</Destination>
+					<Options>bind,optional,create=file,nosuid,noexec</Options>
+				</Entry>
+
+				<Entry type="dev">
+					<Source>/dev/snd</Source>
+					<Destination>dev/snd</Destination>
+					<Options>bind,optional,create=dir,nosuid,noexec</Options>
+				</Entry>
+
+			</MountPoints>
+
+			<LibsRoBindMounts>
+				<Entry>ld</Entry>
+				<Entry>libasound</Entry>
+				<Entry>libattr</Entry>
+				<Entry>libc</Entry>
+				<Entry>libcap</Entry>
+				<Entry>libcjson</Entry>
+				<Entry>libcrypto</Entry>
+				<Entry>libcurl</Entry>
+				<Entry>libdl</Entry>
+				<Entry>libds-hal</Entry>
+				<Entry>libds</Entry>
+				<Entry>libdshalcli</Entry>
+				<Entry>libdshalsrv</Entry>
+				<Entry>libffi</Entry>
+				<Entry>libgcc_s</Entry>
+				<Entry>libgio-2.0</Entry>
+				<Entry>libgio</Entry>
+				<Entry>libglib-2.0</Entry>
+				<Entry>libglib</Entry>
+				<Entry>libgmodule-2.0</Entry>
+				<Entry>libgmodule</Entry>
+				<Entry>libgmp</Entry>
+				<Entry>libgnutls</Entry>
+				<Entry>libgobject-2.0</Entry>
+				<Entry>libgobject</Entry>
+				<Entry>libgthread</Entry>
+				<Entry>libhogweed</Entry>
+				<Entry>libIARMBus</Entry>
+				<Entry>libiarmmgrs-deepsleep-hal</Entry>
+				<Entry>libiarmmgrs-ir-hal</Entry>
+				<Entry>libjansson</Entry>
+				<Entry>liblog4c</Entry>
+				<Entry>liblzma</Entry>
+				<Entry>libm</Entry>
+				<Entry>libnettle</Entry>
+				<Entry>libnopoll</Entry>
+				<Entry>libnsl</Entry>
+				<Entry>libnss_compat</Entry>
+				<Entry>libpcre</Entry>
+				<Entry>libpthread</Entry>
+				<Entry>librdkloggers</Entry>
+				<Entry>libRDKMfrLib</Entry>
+				<Entry>libresolv</Entry>
+				<Entry>librfcapi</Entry>
+				<Entry>librt</Entry>
+				<Entry>libsecure_wrapper</Entry>
+				<Entry>libssl</Entry>
+				<Entry>libstdc++</Entry>
+				<Entry>libsystemd</Entry>
+				<Entry>libtinfo</Entry>
+				<Entry>libvchiq_arm</Entry>
+				<Entry>libvchostif</Entry>
+				<Entry>libvcos</Entry>
+				<Entry>libxml2</Entry>
+				<Entry>libyajl</Entry>
+				<Entry>libz</Entry>
+				<Entry>libbreakpadwrapper</Entry>
+				<Entry>libuinput</Entry>
+				<Entry>libsafec-3.5.1</Entry>
+				<Entry>libprivilege</Entry>
+				<Entry>libcimplog</Entry>
+				<Entry>libjsoncpp</Entry>
+				<Entry>libwdmp-c</Entry>
+
+			</LibsRoBindMounts>
+		</Rootfs>
+	</LxcConfig>
+</CONTAINER>
+

@@ -1,0 +1,26 @@
+From: Immaneni.Kanthikiran <Kanthikiran_Immaneni@comcast.com>
+Date: Mon Oct 12 11:06:24 2020 +0000
+
+Subject: REFPLTV-593: Runtime issues with generic RPI-V build without meta-wpe on change 44157
+
+Reason for change: Added some boot parameters in config.txt file and enable html5 support in refapp images.
+Test Procedure: Build should success and all functionalities should work.
+Risks: None.
+
+Signed-off-by: Immaneni.Kanthikiran <Kanthikiran_Immaneni@comcast.com>
+---
+
+diff --git a/src/networks/comcast/constants.js b/src/networks/comcast/constants.js
+index 2a25efd..0bba678 100644
+--- a/src/networks/comcast/constants.js
++++ b/src/networks/comcast/constants.js
+@@ -45,7 +45,7 @@ const events = {
+ };
+ 
+ const appTypesMap = {
+-    html5: 'WebApp',
++    html5: 'wpe',
+     spark: 'spark',
+     native: 'native',
+ };
+

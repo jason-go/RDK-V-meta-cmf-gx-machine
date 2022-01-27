@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+################################################################################
+# If not stated otherwise in this file or this component's Licenses.txt file the
+# following copyright and licenses apply:
+#
+# Copyright 2017 Liberty Global B.V.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+-->
+<!-- XML CONFIGURATION FOR OneMWBrowser-->
+
+<CONTAINER SandboxName="RDKBROWSER2">
+    <LxcParams>
+        <LauncherName>rdkbrowser2</LauncherName>
+
+<!-- rdkbrowser2 -->
+
+    <ExecName>/usr/bin/rdkbrowser2.sh</ExecName>
+    <!--    <SystemdNotify create="yes">
+            <PidFile>/var/run/rdkbrowser2/rdkbrowser2process.pid</PidFile>
+            </SystemdNotify>  -->
+    <StopFunction enable="true"></StopFunction>
+
+    </LxcParams>
+
+    <LxcConfig>
+        <UserName>rdkbrowser2</UserName>
+        <GroupName>rdkbrowser2</GroupName>
+        <CGroupSettings>
+            <DeviceCgroup>
+                <DevicesDeny>a</DevicesDeny>
+                <DevicesAllow name="/dev/vchiq">c 245:0 rw</DevicesAllow>
+                <DevicesAllow name="/dev/input/event0">c 13:64 rw</DevicesAllow>
+                <DevicesAllow name="/dev/input/event1">c 13:65 rw</DevicesAllow>
+                <AllowDefaultDevices enable="yes"/>
+            </DeviceCgroup>
+        </CGroupSettings>
+        <Environment>
+            <Variable>XDG_DATA_DIRS=/usr/share/</Variable>
+            <Variable>XDG_RUNTIME_DIR=/run</Variable>
+            <Variable>WAYLAND_DISPLAY=wayland-0</Variable>
+            <Variable>WPE_BACKEND=wayland</Variable>
+            <Variable>WPE_BACKEND_LIBRARY=libWPEBackend-rdk.so</Variable>
+            <Variable>JSC_maxPerThreadStackUsage=524288</Variable>
+            <Variable>JSC_softReservedZoneSize=65536</Variable>
+            <Variable>JSC_reservedZoneSize=32768</Variable>
+            <Variable>GST_WPE_COMP=1</Variable>
+            <Variable>GST_BRCM_VF_DISABLE_CHAIN_WORKAROUND=1</Variable>
+            <Variable>GST_VIRTUAL_DISP_WIDTH=1920</Variable>
+            <Variable>GST_VIRTUAL_DISP_HEIGHT=1080</Variable>
+            <Variable>WEBKIT_DEVICE_PIXEL_RATIO=1</Variable>
+            <Variable>MSE_MAX_BUFFER_SIZE=v:128m</Variable>
+            <Variable>MALLOC_CHECK_=2</Variable>
+            <Variable>DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket</Variable>
+        </Environment>
+        <Network type="none"></Network>
+        <Dbus enable="true"></Dbus>
+
+        <Rootfs create="yes">
+            <MountPoints>
+<!-- /usr/bin -->
+                <Entry type="file">
+                    <Source>/usr/bin/rdkbrowser2</Source>
+                    <Destination>usr/bin/rdkbrowser2</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/rdkbrowser2-control</Source>
+                    <Destination>usr/bin/rdkbrowser2-control</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/rdkbrowser2.sh</Source>
+                    <Destination>usr/bin/rdkbrowser2.sh</Destination>
+                    <Options>rw,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/westeros</Source>
+                    <Destination>usr/bin/westeros</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/killall</Source>
+                    <Destination>usr/bin/killall</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+                <Entry type="file">
+                    <Source>/usr/bin/WPEWebProcess</Source>
+                    <Destination>usr/bin/WPEWebProcess</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+                <Entry type="file">
+                    <Source>/usr/bin/WPENetworkProcess</Source>
+                    <Destination>usr/bin/WPENetworkProcess</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/usr/bin/WPEStorageProcess</Source>
+                    <Destination>usr/bin/WPEStorageProcess</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /usr/lib -->
+                <Entry type="dir">
+                    <Source>/usr/lib/gstreamer-1.0</Source>
+                    <Destination>usr/lib/gstreamer-1.0</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/usr/lib/gio</Source>
+                    <Destination>usr/lib/gio</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/usr/libexec/gstreamer-1.0</Source>
+                    <Destination>usr/libexec/gstreamer-1.0</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /lib -->
+                <Entry type="dir">
+                    <Source>/lib/rdk/launch_rdkbrowser2_server.sh</Source>
+                    <Destination>/lib/rdk/launch_rdkbrowser2_server.sh</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /usr/share -->
+                <Entry type="dir" version="debug">
+                    <Source>/usr/share/mime</Source>
+                    <Destination>usr/share/mime</Destination>
+                    <Options>ro,bind,nosuid,nodev,noexec</Options>
+                </Entry>
+
+
+                <Entry type="dir">
+                    <Source>/usr/share/X11/xkb</Source>
+                    <Destination>usr/share/X11/xkb</Destination>
+                    <Options>ro,bind,nosuid,nodev,noexec</Options>
+                </Entry>
+
+<!-- /bin -->
+                <Entry type="file">
+                        <Source>/bin/sh</Source>
+                        <Destination>bin/sh</Destination>
+                        <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                        <Source>/bin/ls</Source>
+                        <Destination>bin/ls</Destination>
+                        <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                        <Source>/bin/vi</Source>
+                        <Destination>bin/vi</Destination>
+                        <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                        <Source>/bin/systemctl</Source>
+                        <Destination>bin/systemctl</Destination>
+                        <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                        <Source>/bin/bash</Source>
+                        <Destination>bin/bash</Destination>
+                        <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /etc -->
+                <Entry type="file">
+                    <Source>/etc/nsswitch.conf</Source>
+                    <Destination>etc/nsswitch.conf</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/resolv.conf</Source>
+                    <Destination>etc/resolv.conf</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/etc/fonts</Source>
+                    <Destination>etc/fonts</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/etc/ssl/certs</Source>
+                    <Destination>etc/ssl/certs</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/hosts</Source>
+                    <Destination>etc/hosts</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/debug.ini</Source>
+                    <Destination>etc/debug.ini</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/log4crc</Source>
+                    <Destination>etc/log4crc</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/default/westeros-env</Source>
+                    <Destination>etc/default/westeros-env</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="file">
+                    <Source>/etc/device.properties</Source>
+                    <Destination>etc/device.properties</Destination>
+                    <Options>ro,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/etc/xdg</Source>
+                    <Destination>etc/xdg</Destination>
+                    <Options>bind,optional,create=dir,nosuid,noexec</Options>
+                </Entry>
+
+<!-- /var -->
+                <Entry type="dir">
+                    <Source>/var/cache/fontconfig</Source>
+                    <Destination>var/cache/fontconfig</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /run-->
+                <Entry type="file">
+                    <Source>/run/systemd/journal/socket</Source>
+                    <Destination>run/systemd/journal/socket</Destination>
+                    <Options>rw,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+                <Entry type="dir">
+                    <Source>/run/udev</Source>
+                    <Destination>run/udev</Destination>
+                    <Options>ro,bind,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /proc -->
+                <Entry type="dir">
+                    <Source>proc</Source>
+                    <Destination>proc</Destination>
+                    <FsType>proc</FsType>
+                    <Options>defaults,noexec,nosuid,nodev,hidepid=2</Options>
+                </Entry>
+
+<!-- /sysfs -->
+                <Entry type="dir">
+                    <Source>sysfs</Source>
+                    <Destination>sys</Destination>
+                    <FsType>sysfs</FsType>
+                    <Options>defaults,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /tmp -->
+                <Entry type="dir">
+                    <Source>/tmp</Source>
+                    <Destination>tmp</Destination>
+                    <Options>rw,bind,noexec,nosuid,nodev</Options>
+                </Entry>
+
+<!-- /dev -->
+                <Entry type="dev">
+                    <Source>/dev/vchiq</Source>
+                    <Destination>dev/vchiq</Destination>
+                    <Options>bind,optional,create=file,nosuid,noexec</Options>
+                </Entry>
+
+                <Entry type="dev">
+                    <Source>/dev/input</Source>
+                    <Destination>dev/input</Destination>
+                    <Options>bind,optional,create=dir,nosuid,noexec</Options>
+                </Entry>
+
+            </MountPoints>
+
+            <LibsRoBindMounts>
+                <Entry>ld</Entry>
+                <Entry>libasound</Entry>
+                <Entry>libatomic</Entry>
+                <Entry>libattr</Entry>
+                <Entry>libbcm_host</Entry>
+                <Entry>libbz2</Entry>
+                <Entry>libc</Entry>
+                <Entry>libcairo</Entry>
+                <Entry>libcap</Entry>
+                <Entry>libcjson</Entry>
+                <Entry>libcrypto</Entry>
+                <Entry>libcurl</Entry>
+                <Entry>libdl</Entry>
+                <Entry>libDtcpMgr-1.0</Entry>
+                <Entry>libEGL</Entry>
+                <Entry>libevdev</Entry>
+                <Entry>libexpat</Entry>
+                <Entry>libffi</Entry>
+                <Entry>libFLAC</Entry>
+                <Entry>libfontconfig</Entry>
+                <Entry>libfreetype</Entry>
+                <Entry>libgcc_s</Entry>
+                <Entry>libgcrypt</Entry>
+                <Entry>libgio-2.0</Entry>
+                <Entry>libGLESv2</Entry>
+                <Entry>libglib-2.0</Entry>
+                <Entry>libgmodule-2.0</Entry>
+                <Entry>libgnutls</Entry>
+                <Entry>libgobject-2.0</Entry>
+                <Entry>libgpg-error</Entry>
+                <Entry>libgstadaptivedemux-1.0</Entry>
+                <Entry>libgstallocators-1.0</Entry>
+                <Entry>libgstapp-1.0</Entry>
+                <Entry>libgstaudio-1.0</Entry>
+                <Entry>libgstbadbase-1.0</Entry>
+                <Entry>libgstbadvideo-1.0</Entry>
+                <Entry>libgstbase-1.0</Entry>
+                <Entry>libgstcodecparsers-1.0</Entry>
+                <Entry>libgstcontroller-1.0</Entry>
+                <Entry>libgstfft-1.0</Entry>
+                <Entry>libgstgl-1.0</Entry>
+                <Entry>libgstmpegts-1.0</Entry>
+                <Entry>libgstnet-1.0</Entry>
+                <Entry>libgstpbutils-1.0</Entry>
+                <Entry>libgstreamer-1.0</Entry>
+                <Entry>libgstriff-1.0</Entry>
+                <Entry>libgstrtp-1.0</Entry>
+                <Entry>libgstrtsp-1.0</Entry>
+                <Entry>libgstsdp-1.0</Entry>
+                <Entry>libgsttag-1.0</Entry>
+                <Entry>libgsturidownloader-1.0</Entry>
+                <Entry>libgstvideo-1.0</Entry>
+                <Entry>libgthread-2.0</Entry>
+                <Entry>libharfbuzz-icu</Entry>
+                <Entry>libharfbuzz</Entry>
+                <Entry>libhnsource</Entry>
+                <Entry>libIARMBus</Entry>
+                <Entry>libicudata</Entry>
+                <Entry>libicui18n</Entry>
+                <Entry>libicuuc</Entry>
+                <Entry>libinput</Entry>
+                <Entry>libjpeg</Entry>
+                <Entry>liblog4c</Entry>
+                <Entry>liblzma</Entry>
+                <Entry>libm</Entry>
+                <Entry>libmtdev</Entry>
+                <Entry>libnsl</Entry>
+                <Entry>libnss_compat</Entry>
+                <Entry>libnss_dns</Entry>
+                <Entry>libnss_files</Entry>
+                <Entry>libnss_myhostname</Entry>
+                <Entry>libogg</Entry>
+                <Entry>liborc-0.4</Entry>
+                <Entry>libpcre</Entry>
+                <Entry>libpixman-1</Entry>
+                <Entry>libpng16</Entry>
+                <Entry>libpthread</Entry>
+                <Entry>librdkloggers</Entry>
+                <Entry>libresolv</Entry>
+                <Entry>librmfbase</Entry>
+                <Entry>librmfosal</Entry>
+                <Entry>librmfosalutils</Entry>
+                <Entry>librt</Entry>
+                <Entry>libsoup-2.4</Entry>
+                <Entry>libsqlite3</Entry>
+                <Entry>libssl</Entry>
+                <Entry>libstdc++</Entry>
+                <Entry>libsystemd</Entry>
+                <Entry>libtheoradec</Entry>
+                <Entry>libtheoraenc</Entry>
+                <Entry>libtinyxml</Entry>
+                <Entry>libudev</Entry>
+                <Entry>libuuid</Entry>
+                <Entry>libvchiq_arm</Entry>
+                <Entry>libvchostif</Entry>
+                <Entry>libvcos</Entry>
+                <Entry>libvorbis</Entry>
+                <Entry>libvorbisenc</Entry>
+                <Entry>libvorbisidec</Entry>
+                <Entry>libwayland-client</Entry>
+                <Entry>libwayland-cursor</Entry>
+                <Entry>libwayland-egl</Entry>
+                <Entry>libwayland-server</Entry>
+                <Entry>libwesteros_compositor</Entry>
+                <Entry>libwesteros_simplebuffer_client</Entry>
+                <Entry>libwesteros_simplebuffer_server</Entry>
+                <Entry>libwesteros_simpleshell_client</Entry>
+                <Entry>libwesteros_simpleshell_server</Entry>
+                <Entry>libWPEBackend-rdk</Entry>
+                <Entry>libWPEBackend</Entry>
+                <Entry>libWPEWebKit</Entry>
+                <Entry>libxml2</Entry>
+                <Entry>libxslt</Entry>
+                <Entry>libz</Entry>
+                <Entry>libatk</Entry>
+                <Entry>libwesteros_render_gl</Entry>
+                <Entry>libwesteros_gl</Entry>
+                <Entry>libessos</Entry>
+                <Entry>libwesteros_compositor</Entry>
+                <Entry>libwesteros_render_embedded</Entry>
+                <Entry>libbrcmEGL</Entry>
+                <Entry>libbrcmGLESv2</Entry>
+                <Entry>libbrcmOpenVG</Entry>
+                <Entry>libbrcmWFC</Entry>
+                <Entry>libcontainers</Entry>
+                <Entry>libdebug_sym</Entry>
+                <Entry>libdtovl</Entry>
+                <Entry>libmmal_components</Entry>
+                <Entry>libmmal_core</Entry>
+                <Entry>libmmal</Entry>
+                <Entry>libmmal_util</Entry>
+                <Entry>libmmal_vc_client</Entry>
+                <Entry>libopenmaxil</Entry>
+                <Entry>libOpenVG</Entry>
+                <Entry>libvcsm</Entry>
+                <Entry>libWFC</Entry>
+                <Entry>libxkbcommon</Entry>
+                <Entry>libtinfo</Entry>
+                <Entry>libNE10</Entry>
+                <Entry>libTasseograph</Entry>
+                <Entry>libaamp</Entry>
+                <Entry>libaampjsbindings</Entry>
+                <Entry>libgstaamp</Entry>
+                <Entry>libdvrmgr</Entry>
+                <Entry>libdvrmgrsoc</Entry>
+                <Entry>libdvrsink</Entry>
+                <Entry>libfaad</Entry>
+                <Entry>libgmp</Entry>
+                <Entry>libgstrmfmeta</Entry>
+                <Entry>libhogweed</Entry>
+                <Entry>libinbsectionfilter</Entry>
+                <Entry>libinbsimanager</Entry>
+                <Entry>libmpg123</Entry>
+                <Entry>libnettle</Entry>
+                <Entry>liboobsectionfilter</Entry>
+                <Entry>liboobsimgrstub</Entry>
+                <Entry>libopus</Entry>
+                <Entry>libqamsrc</Entry>
+                <Entry>librfcapi</Entry>
+                <Entry>librtCore</Entry>
+                <Entry>librtRemote</Entry>
+                <Entry>libsectionfilter</Entry>
+                <Entry>libwebp</Entry>
+                <Entry>libwebpdemux</Entry>
+                <Entry>libwpe-0.2</Entry>
+                <Entry>libabr</Entry>
+                <Entry>libdash</Entry>
+                <Entry>libhdhomerun</Entry>
+                <Entry>libTTSClient</Entry>
+                <Entry>librtRemote</Entry>
+                <Entry>libatomic</Entry>
+                <Entry>libbreakpadwrapper</Entry>
+                <Entry>libepoxy</Entry>
+                <Entry>libocdm</Entry>
+                <Entry>libWPEFrameworkCore</Entry>
+                <Entry>libWPEFrameworkProtocols</Entry>
+                <Entry>libWPEFrameworkTracing</Entry>
+                <Entry>libWPEFrameworkCryptalgo</Entry>
+                <Entry>liba52</Entry>
+                <Entry>libessosrmgr</Entry>
+                <Entry>libTextToSpeechServiceClient</Entry>
+                <Entry>librdkat</Entry>
+                <Entry>libWPEFrameworkPlugins</Entry>
+                <Entry>libWPEFrameworkSecurityUtil</Entry>
+                <Entry>libsafec-3.5.1</Entry>
+                <Entry>libcrashlog</Entry>
+                <Entry>libtr181api</Entry>
+                <Entry>libmetrics</Entry>
+                <Entry>libsecurityagent</Entry>
+                <Entry>libevent-2.0</Entry>
+                <Entry>libbrotlidec</Entry>
+                <Entry>libbrotlicommon</Entry>
+            </LibsRoBindMounts>
+        </Rootfs>
+    </LxcConfig>
+</CONTAINER>

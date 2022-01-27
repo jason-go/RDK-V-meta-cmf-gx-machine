@@ -1,0 +1,72 @@
+From 060957848a750a142b453d30122694a179d77b1d Mon Sep 17 00:00:00 2001
+From: Andre McCurdy <armccurdy@gmail.com>
+Date: Wed, 27 Sep 2017 15:01:15 -0700
+Subject: [PATCH] fix for ARM with musl
+
+See: https://groups.google.com/forum/#!topic/google-breakpad-discuss/eJudWriRE10
+
+  | In file included from ../git/src/common/memory.h:50:0,
+  |                  from ../git/src/common/linux/elfutils.h:40,
+  |                  from ../git/src/common/linux/dump_symbols.cc:63:
+  | ../git/src/third_party/lss/linux_syscall_support.h: In function 'int sys_fstat(int, kernel_stat64*)':
+  | ../git/src/third_party/lss/linux_syscall_support.h:1805:28: error: conflicting declaration of C function 'int sys_fstat(int, kernel_stat64*)'
+  |      #define LSS_NAME(name) sys_##name
+  |                             ^
+  | ../git/src/third_party/lss/linux_syscall_support.h:2559:12: note: in expansion of macro 'LSS_NAME'
+  |        type LSS_NAME(name)(type1 arg1, type2 arg2) {                           \
+  |             ^~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h:3859:16: note: in expansion of macro '_syscall2'
+  |      LSS_INLINE _syscall2(int, fstat64,             int, f,
+  |                 ^~~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h:1805:28: note: previous declaration 'int sys_fstat(int, kernel_stat*)'
+  |      #define LSS_NAME(name) sys_##name
+  |                             ^
+  | ../git/src/third_party/lss/linux_syscall_support.h:2559:12: note: in expansion of macro 'LSS_NAME'
+  |        type LSS_NAME(name)(type1 arg1, type2 arg2) {                           \
+  |             ^~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h:3352:14: note: in expansion of macro '_syscall2'
+  |    LSS_INLINE _syscall2(int,     fstat,           int,         f,
+  |               ^~~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h: In function 'int sys_stat(const char*, kernel_stat64*)':
+  | ../git/src/third_party/lss/linux_syscall_support.h:1805:28: error: conflicting declaration of C function 'int sys_stat(const char*, kernel_stat64*)'
+  |      #define LSS_NAME(name) sys_##name
+  |                             ^
+  | ../git/src/third_party/lss/linux_syscall_support.h:2559:12: note: in expansion of macro 'LSS_NAME'
+  |        type LSS_NAME(name)(type1 arg1, type2 arg2) {                           \
+  |             ^~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h:3895:16: note: in expansion of macro '_syscall2'
+  |      LSS_INLINE _syscall2(int, stat64,              const char *, p,
+  |                 ^~~~~~~~~
+  | ERROR: oe_runmake failed
+  | ../git/src/third_party/lss/linux_syscall_support.h:1805:28: note: previous declaration 'int sys_stat(const char*, kernel_stat*)'
+  |      #define LSS_NAME(name) sys_##name
+  |                             ^
+  | ../git/src/third_party/lss/linux_syscall_support.h:2559:12: note: in expansion of macro 'LSS_NAME'
+  |        type LSS_NAME(name)(type1 arg1, type2 arg2) {                           \
+  |             ^~~~~~~~
+  | ../git/src/third_party/lss/linux_syscall_support.h:3501:16: note: in expansion of macro '_syscall2'
+  |      LSS_INLINE _syscall2(int,     stat,            const char*, f,
+  |                 ^~~~~~~~~
+
+Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
+---
+ linux_syscall_support.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/linux_syscall_support.h b/linux_syscall_support.h
+index 6a60202..c461579 100644
+--- a/linux_syscall_support.h
++++ b/linux_syscall_support.h
+@@ -785,6 +785,9 @@ struct kernel_statfs {
+ #define FUTEX_TRYLOCK_PI_PRIVATE  (FUTEX_TRYLOCK_PI | FUTEX_PRIVATE_FLAG)
+ #endif
+ 
++#undef stat64
++#undef fstat64
++
+ #ifndef __NR_fstatat
+ #define __NR_fstatat __NR_fstatat64
+ #endif
+-- 
+1.9.1
+

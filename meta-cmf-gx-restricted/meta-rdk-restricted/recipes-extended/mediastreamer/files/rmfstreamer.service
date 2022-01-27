@@ -1,0 +1,12 @@
+[Unit]
+Description=RMF Streamer
+After=lighttpd.service network-online.target rmfstreamersetup.service
+Requires=network-online.target rmfstreamersetup.service
+#OnFailure=reboot-logger.service
+
+[Service]
+ExecStart=/container/RMFSTREAMER/launcher/rmfstreamer.sh start
+ExecStop=/container/RMFSTREAMER/launcher/rmfstreamer.sh stop
+
+[Install]
+WantedBy=multi-user.target

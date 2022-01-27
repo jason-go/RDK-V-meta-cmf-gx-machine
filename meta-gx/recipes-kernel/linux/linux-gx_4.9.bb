@@ -1,0 +1,8 @@
+LINUX_VERSION ?= "4.9.y"
+LINUX_RPI_KMETA_BRANCH ?= "yocto-5.4"
+
+KERNEL_VERSION_SANITY_SKIP="1"
+SRCREV_meta = "5d52d9eea95fa09d404053360c2351b2b91b323b"
+
+require linux-gx_4.9.inc
+
